@@ -48,15 +48,14 @@ async function fetchGeocode(location){
         }
         return null
     } catch (error){
-        console.error('Error fetching the geocode', err)
+        console.error('Error fetching the geocode', error)
         return null
     }
 }
 
 async function fetchWeather(location) {
     try{
-        const locationData = fetchGeocode(location)
-
+        const locationData = await fetchGeocode(location)
         if(!locationData) {
             throw new Error('Could not get the location coordinates')
         }
@@ -67,10 +66,9 @@ async function fetchWeather(location) {
         console.error('Error fetching the weather',error)
         return null
     }
-    
 }
 
-const PORT = process.env.PORT || 5000;
+const PORT = 6000;
 app.listen(PORT, ()=>{
     console.log(`Server running on port ${PORT}`)
 })
