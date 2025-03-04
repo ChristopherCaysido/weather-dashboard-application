@@ -53,6 +53,23 @@ async function fetchGeocode(location){
     }
 }
 
+async function fetchWeather(location) {
+    try{
+        const locationData = fetchGeocode(location)
+
+        if(!locationData) {
+            throw new Error('Could not get the location coordinates')
+        }
+        const api_url = `https://api.openweathermap.org/data/3.0/onecall?lat=${locationData.lat}&lon=${locationData.lon}&exclude={part}&appid=${process.env.OW_API}`
+        const response = await axios.get(api_url)
+        return response.data;
+    } catch (error){
+        console.error('Error fetching the weather',error)
+        return null
+    }
+    
+}
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=>{
     console.log(`Server running on port ${PORT}`)
