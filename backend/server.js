@@ -31,6 +31,27 @@ app.post('/subscribe', async (req,res) => {
         res.status(500).json({error: 'Database Error'})
     }
 })
+// Weather Data
+// https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+// Geocode
+// http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+
+async function fetchGeocode(location){
+    try{
+        const geocode_url = `http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=${process.env.OW_API}`
+        const response = await axios.get(geocode_url)
+        if(response.data && response.data.length > 0){
+            return {
+                lat: response.data[0].lat,
+                lon: response.data[0].lon,
+            }
+        }
+        return null
+    } catch (error){
+        console.error('Error fetching the geocode', err)
+        return null
+    }
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=>{
